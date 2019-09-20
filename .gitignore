@@ -1,2 +1,6 @@
 ChatTeamInternational/ChatTeamInternational/obj/
 ChatTeamInternational/.vs/ChatTeamInternational/v16/
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/webpack.prod.conf.js
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/webpack.base.conf.js
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/webpack.dev.conf.js
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/.gitignore
