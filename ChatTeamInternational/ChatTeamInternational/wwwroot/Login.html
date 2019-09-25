@@ -1,157 +1,153 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Список пользователей</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-</head>
-<body>
-    <h2>Список пользователей</h2>
-    <form name="userForm">
-        <input type="hidden" name="id" value="0" />
-        <div class="form-group">
-            <label for="name">Имя:</label>
-            <input class="form-control" name="name" />
+﻿<DOCTYPE html>
+    <html>
+    <head>
+        <title>Vue Demo #1: The Box App</title>
+        <meta charset='utf-8' />
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="https://unpkg.com/vue"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    </head>
+    <body>
+        <div class="page-header">
+            <h1> Login page </h1>
         </div>
-        <div class="form-group">
-            <label for="age">Возраст:</label>
-            <input class="form-control" name="age" />
-        </div>
-        <div class="panel-body">
-            <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
-            <a id="reset" class="btn btn-sm btn-primary">Сбросить</a>
-        </div>
-    </form>
-    <table class="table table-condensed table-striped table-bordered">
-        <thead><tr><th>Id</th><th>Имя</th><th>возраст</th><th></th></tr></thead>
-        <tbody></tbody>
-    </table>
 
-    <script>
-        // Получение всех пользователей
-        function GetUsers() {
-            $.ajax({
-                url: '/api/users',
-                type: 'GET',
-                contentType: "application/json",
-                success: function (users) {
-                    var rows = "";
-                    $.each(users, function (index, user) {
-                        // добавляем полученные элементы в таблицу
-                        rows += row(user);
-                    })
-                    $("table tbody").append(rows);
-                 }
-            });
-        }
-        // Получение одного пользователя
-        function GetUser(id) {
-            $.ajax({
-                url: '/api/users/'+id,
-                type: 'GET',
-                contentType: "application/json",
-                success: function (user) {
-                    var form = document.forms["userForm"];
-                    form.elements["id"].value = user.id;
-                    form.elements["name"].value = user.name;
-                    form.elements["age"].value = user.age;
-                }
-            });
-        }
-        // Добавление пользователя
-        function CreateUser(userName, userAge) {
-            $.ajax({
-                url: "api/users",
-                contentType: "application/json",
-                method: "POST",
-                data: JSON.stringify({
-                    name: userName,
-                    age: userAge
-                }),
-                success: function (user) {
-                    reset();
-                    $("table tbody").append(row(user));
+        <div class="loginForm">
+            <div class="container">
+
+                <div id="exTab3" class="container">
+                    <ul class="nav nav-pills">
+                        <li class="active">
+                            <a href="#1b" data-toggle="tab">Login</a>
+                        </li>
+                        <li>
+                            <a href="#2b" data-toggle="tab">Join</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content clearfix" style="background-color:white">
+                        <div class="tab-pane active" id="1b">
+                            <input id="login" type="text" placeholder="login" v-model="loginInput" />
+                            <input id="password " type="text" placeholder="password" v-model="passwordInput" />
+                            <div style="display:block">
+                                <button v-on:click="loginUser(loginInput.value, passwordInput.value)">Login</button>
+                                <button>Cancel</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="2b">
+                            <input type="text" placeholder="login" v-model="loginRegister" />
+                            <input type="text" placeholder="password" v-model="passwordRegister" />
+                            <input type="text" placeholder="repeat password" v-model="passwordRepeatRegister" />
+                            <div style="display:block">
+                                <button v-on:click="registerUser(loginRegister.value, passwordRegister.value, passwordRepeatRegister.value)">Register</button>
+                                <button>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="validation">{{reportMessage}}</div>
+        </div>
+        <script>
+            const vueApp = new Vue({
+                el: '#vapp',
+                data: {
+                    isValid: false,
+                    reportMessage: "",
+                    done: false
+                },
+                methods: {
+                    loginUser: function (name, pass) {
+
+                        let user = new User(name, pass);
+
+                        this.axios.post("http://localhost:5001/Api/Message/Login", user).then((obj) => {
+                            this.isValid = (obj != null) ? true : false;
+                            localStorage.setItem('token', obj['access_token']);
+                            if (this.isValid) {
+
+                                this.reportMessage = "User is valid";
+
+                                this.goToItem(this.skype);
+                            }
+                            else { this.reportMessage = "User not found, register please"; }
+                        });
+                    },
+
+                    registerUser: function (name, pass, repeatPass) {
+
+                        if (pass != repeatPass) {
+                            this.reportMessage = "Your password incorrect";
+                            return;
+                        }
+                        else {
+                            var userOnRegistration = new User(name, pass);
+
+                            this.dataService.post('Account/Register', userOnRegistration).then((data) => {
+                                this.isValid = data;
+                                if (this.isValid) {
+                                    this.reportMessage = "User allready exist";
+                                }
+                                else { this.reportMessage = "You have been registered successfully"; }
+                            });
+                        }
+
+                    }
                 }
             })
-        }
-        // Изменение пользователя
-        function EditUser(userId, userName, userAge) {
-            $.ajax({
-                url: "api/users",
-                contentType: "application/json",
-                method: "PUT",
-                data: JSON.stringify({
-                    id: userId,
-                    name: userName,
-                    age: userAge
-                }),
-                success: function (user) {
-                    reset();
-                    $("tr[data-rowid='" + user.id + "']").replaceWith(row(user));
+        </script>
+        <style>
+            .loginForm {
+                margin: 10% 10% 10% 40%;
+                width: 20%;
+                height: 30%;
+            }
+
+                .loginForm > input {
+                    display: block;
                 }
-            })
-        }
 
-        // сброс формы
-        function reset() {
-            var form = document.forms["userForm"];
-            form.reset();
-            form.elements["id"].value = 0;
-        }
+            #validation {
+                width: 300px;
+                height: 100px;
+            }
 
-        // Удаление пользователя
-        function DeleteUser(id) {
-            $.ajax({
-                url: "api/users/"+id,
-                contentType: "application/json",
-                method: "DELETE",
-                success: function (user) {
-                    $("tr[data-rowid='" + user.id + "']").remove();
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+            }
+
+                .tab button {
+                    background-color: inherit;
+                    float: left;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    padding: 14px 16px;
+                    transition: 0.3s;
                 }
-            })
-        }
-        // создание строки для таблицы
-        var row = function (user) {
-            return "<tr data-rowid='" + user.id + "'><td>" + user.id + "</td>" +
-                   "<td>" + user.name + "</td> <td>" + user.age + "</td>" +
-                   "<td><a class='editLink' data-id='" + user.id + "'>Изменить</a> | " +
-                    "<a class='removeLink' data-id='" + user.id + "'>Удалить</a></td></tr>";
-        }
-        // сброс значений формы
-        $("#reset").click(function (e) {
 
-            e.preventDefault();
-            reset();
-        })
 
-        // отправка формы
-        $("form").submit(function (e) {
-            e.preventDefault();
-            var id = this.elements["id"].value;
-            var name = this.elements["name"].value;
-            var age = this.elements["age"].value;
-            if (id == 0)
-                CreateUser(name, age);
-            else
-                EditUser(id, name, age);
-        });
+                    .tab button:hover {
+                        background-color: #ddd;
+                    }
 
-        // нажимаем на ссылку Изменить
-        $("body").on("click", ".editLink", function () {
-            var id = $(this).data("id");
-            GetUser(id);
-        })
-        // нажимаем на ссылку Удалить
-        $("body").on("click", ".removeLink", function () {
-            var id = $(this).data("id");
-            DeleteUser(id);
-        })
 
-        // загрузка пользователей
-        GetUsers();
+                    .tab button.active {
+                        background-color: #ccc;
+                    }
 
-    </script>
-</body>
+
+            .tabcontent {
+                display: block;
+                padding: 6px 12px;
+                border-top: none;
+            }
+        </style>
+    </body>
 </html>

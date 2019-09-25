@@ -9,7 +9,7 @@ namespace ChatTeamInternational.Models.DBModels
     {
 
         public string NickName { get; set; }
-        public List<Message> Messages { get; set; }       
+        public List<Message> Messages { get; set; } = new List<Message>();     
         public string Password { get; set; }
        
 

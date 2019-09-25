@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChatTeamInternational.Models.DBModels;
+using ChatTeamInternational.Models.VModels;
+using ChatTeamInternational.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,38 +12,48 @@ using Microsoft.AspNetCore.Mvc;
 namespace ChatTeamInternational.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class MessageController : Controller
     {
-        // GET: api/<controller>
-        [HttpGet]
-        public IEnumerable<string> Get()
+       
+       MessageService _messageService;
+
+        public MessageController( MessageService userService)
         {
-            return new string[] { "value1", "value2" };
+            _messageService = userService;
         }
 
-        // GET api/<controller>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
+        
         [HttpPost]
-        public void Post([FromBody]string value)
+        [Route("Login")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult CheckMessage([FromBody]MessageVM model)
         {
+            var isValid = _messageService.IsMessageExist(model);
+            if (isValid)
+                return Json(model);
+            else return Json(null);
         }
 
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPost]
+        [Route("AddMessageToStore")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult AddMessageToStore([FromBody]MessageVM model)
         {
+            User user = new User { NickName = "Nick", Password = "1111" }; 
+            _messageService.SaveMessage(model);
+            return Json(true);
         }
 
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost]
+        [Route("EditMessage")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult EditMessage([FromBody]MessageVM model)
         {
+            _messageService.SaveMessage(model);
+            return Json(true);
         }
+
+
     }
 }

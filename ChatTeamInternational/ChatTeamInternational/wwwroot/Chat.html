@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Маршрутизация Vue.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+</head>
+<body>
+
+    <div id="app">
+        <div class="col-md-4">
+            <label>Введите комментарий</label>
+            <textarea v-model="comment" class="form-control"></textarea>
+            <br>
+            <div>
+                <h3>Комментарий</h3>
+                <p style="white-space: pre-line">{{comment}}</p>
+            </div>
+        </div>
+        <div id="global">
+            <div id="messageBlock">
+                <div id="main-container" style="text-align:center">
+                    <div class="container">
+                        <h2>Hello {{hello}}!</h2>
+
+                        <div>
+                            <label for="message">Message</label>
+                            <input type="text" id="message" name="message" v-model="message" required>
+                        </div>
+                        <button type="submit" v-on:click="sendMessage" class="btn btn-success">
+                            Send
+                        </button>
+
+                    </div>
+                    <div class="container" v-if="messages.length > 0">
+                        <div v-for="message in messages">
+                            <div>
+                                {{message}}
+                                <button type="submit" v-on:click="sendMessage" class="btn btn-success">
+                                    Do
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            //router: router
+            data: {
+                hello: "",
+                nick: '',
+                message: '',
+                recivedText: "",
+                messages: [""],
+                comment: ""
+            },
+            methods: {
+                sendMessage: function (event) {
+                    debugger;
+                    //message = ("#message").value;
+                    //messages.push(message);
+                    var Text = { message:"AAAAAA"}
+                    axios.post('http://localhost:5001/Api/Message/AddMessageToStore', Text).then(function (response) {
+                            console.log('saved successfully')
+                        });
+                }
+            }
+        })
+    </script>
+    <style>
+        body {
+            padding: 10px;
+        }
+
+        #contacts {
+            position: absolute;
+            left: 0;
+            width: 25%;
+            height: inherit;
+        }
+
+        #messageBlock {
+            position: absolute;
+            right: 0;
+        }
+
+        #exTab1 .tab-content {
+            color: white;
+            background-color: #428bca;
+            padding: 5px 15px;
+        }
+
+        #exTab2 h3 {
+            color: white;
+            background-color: #428bca;
+            padding: 5px 15px;
+        }
+
+        /* remove border radius for the tab */
+
+        #exTab1 .nav-pills > li > a {
+            border-radius: 0;
+        }
+
+        /* change border radius for the tab , apply corners on top*/
+
+        #exTab3 .nav-pills > li > a {
+            border-radius: 4px 4px 0 0;
+        }
+
+        #exTab3 .tab-content {
+            color: white;
+            background-color: #428bca;
+            padding: 5px 15px;
+        }
+
+        #search-results {
+            width: 280px;
+            max-height: 200px;
+            border: 1px solid #dedede;
+            border-radius: 3px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .search-result {
+            background: white;
+            padding: 10px;
+        }
+
+            .search-result:hover {
+                background: skyblue;
+            }
+
+        input {
+            width: 280px;
+            height: 40px;
+            color: #333;
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #dedede;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .search-result:nth-child(even) {
+            background: #fafafa;
+        }
+    </style>
+</body>
+</html>

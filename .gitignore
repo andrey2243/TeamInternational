@@ -4,3 +4,17 @@ ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/webp
 ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/webpack.base.conf.js
 ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/webpack.dev.conf.js
 ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/.gitignore
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/static/.gitkeep
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/src/assets/logo.png
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/logo.png
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/config/
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/package-lock.json
+ChatTeamInternational/ChatTeamInternational/Client/AccountOwnerClient/build/vue-loader.conf.js
+ChatTeamInternational/ChatTeamInternational/Client/node_modules/vue/src/compiler/
+ChatTeamInternational/ChatTeamInternational/Client/node_modules/vue/src/core/global-api/
+ChatTeamInternational/ChatTeamInternational/Client/node_modules/vue/src/core/util/
+ChatTeamInternational/ChatTeamInternational/Client/node_modules/
+ChatTeamInternational/ChatTeamInternational/node_modules/axios/
+ChatTeamInternational/ChatTeamInternational/node_modules/vue-axios/
+ChatTeamInternational/ChatTeamInternational/node_modules/
+ChatTeamInternational/ChatTeamInternational.7z

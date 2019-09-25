@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace ChatTeamInternational.Database
 {
-    public class ChatContext
+    public class ChatContext: DbContext
     {
 
 
-        public ChatContext(/*DbContextOptions<ChatContext> options*/)
-          
-        {
+        
+
+        public ChatContext(DbContextOptions<ChatContext> options)
+            :base(options)
+        { 
         }
 
         public DbSet<User> Users { get; set; }

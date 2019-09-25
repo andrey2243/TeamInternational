@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChatTeamInternational.Models.VModels
+namespace ChatTeamInternational.Services.Contracts
 {
-    public class MessageVM
+    interface IMessageService
     {
-        public string Text { get; set; }
     }
 }

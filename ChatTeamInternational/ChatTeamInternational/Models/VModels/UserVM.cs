@@ -7,5 +7,7 @@ namespace ChatTeamInternational.Models.VModels
 {
     public class UserVM
     {
+        public string NickName { get; set; }
+        public string Password { get; set; }
     }
 }

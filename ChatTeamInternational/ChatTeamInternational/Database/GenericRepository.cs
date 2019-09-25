@@ -1,5 +1,6 @@
 ﻿using ChatTeamInternational.Database.Contracts;
 using ChatTeamInternational.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ namespace ChatTeamInternational.Database
     {
         ChatContext _context;
         DbSet<T> table;
-        // EnvironmentVariableTarget v;
+
 
         public GenericRepository(ChatContext context)
         {
             this._context = context;
-            table = this._context.Set<T>();
+            table = context.Set<T>();
         }
 
         private bool disposed = false;
@@ -44,7 +45,7 @@ namespace ChatTeamInternational.Database
             return table;
         }
 
-        public T Get(string id)
+        public T Get(int id)
         {
             return table.SingleOrDefault(el => el.Id == id);
         }
@@ -56,13 +57,13 @@ namespace ChatTeamInternational.Database
 
         }
 
-        public void Update(T item)// where T : class, IBaseModel
+        public virtual void Update(T item)
         {
-            //table.Where<T>(t=>t.Id==item.id);
-            //Save();
+           var sItem =  table.Where<T>(t => t.Id ==  item.Id);            
+            Save();
         }
 
-        public void Delete(string id)
+        public void Delete(int id)
         {
             var item = table.SingleOrDefault(el => el.Id == id);
             item = null;
